@@ -1,14 +1,19 @@
 import socket
+import sys
+import time
+import random
 from commands import get_command
 
 
 # Basic config
 server = "irc.rizon.net"
 port = 6667
-channel = "#/g/punk"
-botnick = "cybits"
+if len(sys.argv) < 2:
+    print("Usage: main.py <channel> [nick]")
+    exit(1)
+channel = sys.argv[1]
+botnick = "BOT" + str(random.randint(1, 9999)) if len(sys.argv) < 3 else sys.argv[2]
 commandprefix = "."
-
 
 def sendmsg(recipient, msg):
     """Sends a message."""
@@ -100,9 +105,13 @@ def process_data(data):
 
 
 ircsock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+time.sleep(.5)
 ircsock.connect((server, port))
+time.sleep(.5)
 ircsock.send("USER %s %s %s :some stuff\n" % (botnick, botnick, botnick))
+time.sleep(.5)
 ircsock.send("NICK %s\n" % botnick)
+time.sleep(.5)
 joinchan(channel)
 
 while True:
